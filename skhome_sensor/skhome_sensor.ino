@@ -23,6 +23,7 @@ IPAddress subnet(255, 255, 255, 0);
 #define GEARKEY     "KHazXa72xG6QRme"
 #define GEARSECRET  "nkjB8z7PmCl1F9IjLlYQe9rs8"
 #define ALIAS       "greenhouse"
+#define FEEDID      "GREENHOUSE"
 
 // define pin
 #define clockPin      D1      // SHT10 CLOCK
@@ -130,6 +131,15 @@ void loop() {
         microgear.publish("/greenhouse/sht/h",String(sht_h));
         
         Serial.println("------------------------------------");
+
+        String data = "{";
+        data += " \"DHT Temperature\":"+String(dht_t);
+        data += ",\"DHT Humidity\":"+String(dht_h);
+        data += ",\"SHT Temperature\":"+String(sht_t);
+        data += ",\"SHT Moisture\":"+String(sht_h);
+        data += ",\"DS18 Temperature\":"+String(ds18b20_t);
+        data += "}";
+        microgear.writeFeed(FEEDID,data);
         timer = 0;
       } 
       else {
