@@ -1,4 +1,4 @@
-// Smart Home project - watering section
+// Smart Home project - Greenhouse Sensors
 // Written by kongdej srisamran, pudza maker club
 
 #include <DHT.h>
@@ -11,6 +11,7 @@
 #include <WiFiUdp.h>
 #include <ArduinoOTA.h>
 
+// Wifi Settings
 const char* ssid     = "ZAB";
 const char* password = "Gearman1";
 
@@ -19,10 +20,11 @@ IPAddress ip(192, 168, 1, 102);
 IPAddress gateway(192, 168, 1, 1);
 IPAddress subnet(255, 255, 255, 0);
 
+// Netpie Settings
 #define APPID       "SKHOME"
 #define GEARKEY     "KHazXa72xG6QRme"
 #define GEARSECRET  "nkjB8z7PmCl1F9IjLlYQe9rs8"
-#define ALIAS       "greenhouse"
+#define ALIAS       "greenhouse_sensor"
 #define FEEDID      "GREENHOUSE"
 
 // define pin
@@ -88,7 +90,6 @@ void setup() {
     microgear.connect(APPID);
   }
 
-
   dht.begin();
   ds18b20.begin();
 }
@@ -133,11 +134,16 @@ void loop() {
         Serial.println("------------------------------------");
 
         String data = "{";
-        data += " \"DHT Temperature\":"+String(dht_t);
-        data += ",\"DHT Humidity\":"+String(dht_h);
-        data += ",\"SHT Temperature\":"+String(sht_t);
-        data += ",\"SHT Moisture\":"+String(sht_h);
-        data += ",\"DS18 Temperature\":"+String(ds18b20_t);
+        data += " \"dht_t\":";
+        data += dht_t;
+        data += ",\"dht_h\":";
+        data += dht_h;
+        data += ",\"sht_t\":";
+        data += sht_t;
+        data += ",\"sht_h\":";
+        data += sht_h;
+        data += ",\"ds18_t\":";
+        data += ds18b20_t;
         data += "}";
         microgear.writeFeed(FEEDID,data);
         timer = 0;
